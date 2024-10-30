@@ -1,0 +1,16 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
+
+
+cc_binary(
+    name = "main",
+    srcs = ["main.cpp", "main.h"],
+)
+
+cc_test(
+    name = "main_test",
+    srcs = ["main_test.cpp", "main.cpp", "main.h"],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ]
+)

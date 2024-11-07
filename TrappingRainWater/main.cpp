@@ -1,15 +1,7 @@
 #include "main.h"
 
-#include <iostream>
-using namespace std;
 
-//42. Trapping Rain Water
-//Given n non-negative integers representing an elevation map where the width of each bar is 1, 
-//compute how much water it can trap after raining.
-
-
-
-int Solution::trap(span<const int> height) {
+int TrappingRainWaterSolution::trap(std::span<const int> height) {
   // Get the size of the elevation map
   size_t n = height.size();
 
@@ -47,7 +39,7 @@ int Solution::trap(span<const int> height) {
     // 1. Find smaller wall height (water can't be higher than min wall)
     // 2. Multiply by distance between walls
     // 3. Subtract height of bars between walls
-    int wall = min(lw, height[rp]);
+    int wall = std::min(lw, height[rp]);
     int distance = rp - i - 1;
     total += (wall * distance) - sub;
   }
@@ -74,7 +66,7 @@ int Solution::trap(span<const int> height) {
       break;
     }
     // Calculate water trapped between walls (same logic as above)
-    int wall = min(rw, height[lp]);
+    int wall = std::min(rw, height[lp]);
     int distance = i - lp - 1;
     total += (wall * distance) - sub;
   }

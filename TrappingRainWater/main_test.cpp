@@ -4,7 +4,7 @@
 
 class SolutionTest : public ::testing::Test {
  protected:
-  Solution solution;
+  TrappingRainWaterSolution solution;
 };
 
 TEST_F(SolutionTest, TrapTests) {

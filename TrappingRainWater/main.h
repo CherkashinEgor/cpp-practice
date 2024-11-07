@@ -1,11 +1,11 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <vector>
+#include <span>
 
 class Solution {
  public:
-  int trap(std::vector<int>& height);
+  int trap(std::span<const int>  height);
 };
 
 #endif

@@ -1,64 +1,79 @@
 #include "main.h"
 
 #include <iostream>
-
 using namespace std;
 
-int Solution::trap(vector<int>& height) {
-  int n = height.size();
+//42. Trapping Rain Water
+//Given n non-negative integers representing an elevation map where the width of each bar is 1, 
+//compute how much water it can trap after raining.
 
+
+
+int Solution::trap(span<const int> height) {
+  // Get the size of the elevation map
+  size_t n = height.size();
+
+  // Edge case: can't trap water with single element
   if (n == 1) {
     return 0;
   }
 
-  // On the first pass, (going left-to-right)
-  // Find a wall and keep going with the right pointer (rp) until hitting a larger or equal sized
-  // wall. This means we hit the end of where water can be trapped In the process, subtract all the
-  // smaller walls
-
-  // Repeat this going the other way too
-
-  // Small change for pull request
-
+  // lp (left pointer) and rp (right pointer) track boundaries of water sections
   int lp = n;
   int rp = 0;
   int total = 0;
 
+  // First pass: scan left to right looking for trapped water
   for (int i = 0; i < n; i++) {
+    // Skip already processed sections
     if (rp > i) {
       i = rp;
     }
+    // Left wall height
     int lw = height[i];
     rp = i + 1;
+    // Track height of bars between walls
     int sub = 0;
+    // Find right wall: first element that's >= left wall
     while (rp < n && height[rp] < lw) {
       sub += height[rp];
       rp += 1;
     }
+    // If no right wall found, can't trap water
     if (rp >= n) {
       break;
     }
+    // Calculate water trapped between walls:
+    // 1. Find smaller wall height (water can't be higher than min wall)
+    // 2. Multiply by distance between walls
+    // 3. Subtract height of bars between walls
     int wall = min(lw, height[rp]);
     int distance = rp - i - 1;
     total += (wall * distance) - sub;
   }
 
+  // Second pass: scan right to left
+  // This catches cases where water is trapped by a higher wall on the left
   for (int i = n - 1; i >= 0; i--) {
+    // Skip already processed sections
     if (lp < i) {
       i = lp;
     }
+    // Right wall height
     int rw = height[i];
     lp = i - 1;
+    // Track height of bars between walls
     int sub = 0;
+    // Find left wall: first element that's > right wall
     while (lp >= 0 && height[lp] <= rw) {
       sub += height[lp];
       lp -= 1;
     }
-
+    // If no left wall found, can't trap water
     if (lp < 0) {
       break;
     }
-
+    // Calculate water trapped between walls (same logic as above)
     int wall = min(rw, height[lp]);
     int distance = i - lp - 1;
     total += (wall * distance) - sub;
@@ -66,26 +81,3 @@ int Solution::trap(vector<int>& height) {
 
   return total;
 }
-
-// int main() {
-//     Solution solution;
-
-//     // Test cases
-//     std::vector<std::vector<int>> test_cases = {
-//         {0,1,0,2,1,0,1,3,2,1,2,1},
-//         {4,2,0,3,2,5},
-//         {4,2,3}
-//     };
-
-//     for (const auto& height : test_cases) {
-//         auto height_copy = height;
-//         int result = solution.trap(height_copy);
-//         cout << "Input: ";
-//         for (int h : height) {
-//             std::cout << h << " ";
-//         }
-//         std::cout << "\nTrapped water: " << result << "\n\n";
-//     }
-
-//     return 0;
-// }
